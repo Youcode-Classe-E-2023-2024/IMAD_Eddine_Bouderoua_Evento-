@@ -8,10 +8,14 @@ use App\Models\events;
 
 class AddEventController extends Controller
 {
-    public function reserve(Request $request){
-        echo "ho";
-        return;
+    public function reserve(Request $request) {
+     
+        $requestData = $request->json()->all();
+    
+        $eventId = $requestData['id'];
+        echo $eventId;
     }
+    
     public function index(Request $request)
     {
         // Access data from the request

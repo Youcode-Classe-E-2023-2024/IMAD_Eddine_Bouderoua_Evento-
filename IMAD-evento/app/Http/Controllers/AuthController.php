@@ -43,7 +43,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $remember = request()->has('remember'); // Check if "Remember Me" checkbox is checked
+        $remember = request()->has('remember');
 
         if(auth()->attempt($validated, $remember)) {
             request()->session()->regenerate();
