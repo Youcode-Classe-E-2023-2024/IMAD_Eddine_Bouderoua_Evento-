@@ -9,6 +9,7 @@ export default function Home() {
   return (
     <main className="w-screen h-screen flex flex-col items-center justify-between">
      <components.Base active={1}/>
+  
      <section id="intro" className="bg-gray-800  flex justify-center items-center  ">
       <div className=" z-50 mt-10 container flex flex-col justify-center items-center mx-auto px-6 py-16">
           <h1 className="gap-3 text-4xl md:text-5xl w-2/4 text-wrap justify-center items-center flex flex-col lg:text-6xl mb-4">

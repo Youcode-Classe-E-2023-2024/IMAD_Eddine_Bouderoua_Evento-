@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AddEventController;
 use App\Http\Controllers\GetAllEvents;
-
+use App\Http\Controllers\Updatetoorganizer;
+use App\Http\Controllers\GetOrganizers;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,7 @@ Route::get('/photo/{filename}', function ($filename) {
         return response()->file(storage_path('app/public/default.jpg'));
     }
 });
+
+Route::post('/Updatetoorganizer',[Updatetoorganizer::class,'index'])->name('GetEvents');
+Route::get("/Organizers",[GetOrganizers::class,'index']);
+Route::post("/reserve",[AddEventController::class,'reserve']);

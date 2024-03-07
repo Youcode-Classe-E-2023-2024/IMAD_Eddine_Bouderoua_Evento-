@@ -25,12 +25,34 @@ export default function Events(){
         };
       
         fetchData();
-      }, [Events]);
+      }, []);
 
     const organiser = true;
     const toggleDetails = () => {
       setDetailsHidden(!detailsHidden);
     };
+    function reserveplace() {
+      fetch("http://127.0.0.1:8000/api/reserve", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'token':'5',
+          },
+          body: JSON.stringify({ id: Eventdetails.id }),
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log(data); // Handle the response data
+      })
+      .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+      });
+  }
   
     const paginatetooleft = () =>{
        console.log("paginateleft") 
@@ -215,7 +237,7 @@ export default function Events(){
             {
                 organiser && 
 
-        <button className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
+        <button onClick={()=>{reserveplace()}} className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
   <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">Reserve Place</span>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.5s]"></div>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2s]"></div>

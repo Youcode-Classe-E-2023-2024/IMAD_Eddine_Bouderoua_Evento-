@@ -8,6 +8,10 @@ use App\Models\events;
 
 class AddEventController extends Controller
 {
+    public function reserve(Request $request){
+        echo "ho";
+        return;
+    }
     public function index(Request $request)
     {
         // Access data from the request
@@ -19,7 +23,7 @@ class AddEventController extends Controller
         $manualReview = $request->input('manual_review');
         $description = $request->input('description');
         $photo = $request->file('photo');
-
+        
         // Validate and store the photo
         $photoPath = $photo->store('images', 'public');
 

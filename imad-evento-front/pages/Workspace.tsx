@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Events(){
     const [activeBtn, setActiveBtn] = useState('events');
     const [photo, setphoto] = useState(null);
-
+    
     const [detailsHidden, setDetailsHidden] = useState(false);
     const organiser = true;
     const toggleDetails = () => {
