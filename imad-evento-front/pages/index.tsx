@@ -26,9 +26,9 @@ export default function Home() {
      {
       auth &&
 
-     <div className="absolute backgro blured m-auto z-50 h-full w-full pt-12">
-       <div className="w-4/5 h-14 m-auto" >
-       <img onClick={()=>{toggleit()}} className=" ml-auto" width="48" height="48" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="delete-sign"/>
+     <div className="absolute backgro blured m-auto z-50 h-full w-full pt-20">
+       <div className="w-4/5 h-14 m-auto absolute top-28" >
+       <img onClick={()=>{toggleit()}} className=" ml-auto " width="48" height="48" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="delete-sign"/>
        </div>
       {
         toggleauth ?

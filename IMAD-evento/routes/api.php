@@ -7,7 +7,8 @@ use App\Http\Controllers\AddEventController;
 use App\Http\Controllers\GetAllEvents;
 use App\Http\Controllers\Updatetoorganizer;
 use App\Http\Controllers\GetOrganizers;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Checkrole;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,3 +44,6 @@ Route::get('/photo/{filename}', function ($filename) {
 Route::post('/Updatetoorganizer',[Updatetoorganizer::class,'index'])->name('GetEvents');
 Route::get("/Organizers",[GetOrganizers::class,'index']);
 Route::post("/reserve",[AddEventController::class,'reserve']);
+Route::post('/register', [AuthController::class, 'store']);
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::post('/Checkwho', [Checkrole::class, 'index']);

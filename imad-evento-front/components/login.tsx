@@ -21,10 +21,57 @@ export default function Login({ onChangeX }){
     
       // Function to handle login form submission
       const handleLoginSubmit = () => {
-        // Access collected data in loginData object
         console.log('Login Data:', loginData);
-        // You can now send this data to your backend or perform other login actions
+        const formDatat = new FormData();
+
+        formDatat.append('email', loginData.email);
+        formDatat.append('password', loginData.password);
+
+
+        fetch('http://127.0.0.1:8000/api/login', {
+    method: 'POST',
+    body: formDatat,
+    })
+    .then(response => {
+        console.log('Response:', response);
+       
+
+
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data:', data);
+        setCookie("token", data.hashed_credentials, 1);
+
+
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
+       
+         
+    
+
+    setLoginData({
+          
+            email: '',
+            password: '',
+          });
       };
+
+      function setCookie(name, value, daysToExpire) {
+        const date = new Date();
+        date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + "; " + expires + "; path=/";
+    }
+
+
     return(
         
         <div className="relative py-3 sm:max-w-xl sm:mx-auto ">

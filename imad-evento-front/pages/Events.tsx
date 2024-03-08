@@ -5,10 +5,21 @@ import { useEffect, useState } from "react";
 
 
 export default function Events(){
+  
     const [detailsHidden, setDetailsHidden] = useState(false);
     const [Events, UpdateEvents] = useState(null);
     const [Eventdetails, Updatedetails] = useState(null);
-
+    const [organiser, setorgan] = useState<boolean | string>(false);
+    useEffect(() => {
+      components.getCookie('token')
+          .then((myCookie) => {
+              console.log(myCookie);
+              if (!myCookie) return;
+              console.log(myCookie + '-k');
+              setorgan(myCookie);
+          });
+  }, []);
+    
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -27,11 +38,13 @@ export default function Events(){
         fetchData();
       }, []);
 
-    const organiser = true;
+    var x = true
     const toggleDetails = () => {
       setDetailsHidden(!detailsHidden);
     };
     function reserveplace() {
+      
+      if(!organiser){ return;}
       fetch("http://127.0.0.1:8000/api/reserve", {
           method: 'POST',
           headers: {
@@ -235,10 +248,87 @@ export default function Events(){
             </p>
         <div className=" h-24 w-60 pt-8  ">
             {
-                organiser && 
+                (!organiser || organiser === 'user') ?
+                <button onClick={()=>{reserveplace()}} className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">Reserve Place</span>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.5s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.5s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.9s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.45s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.6s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.65s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.15s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.55s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.85s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.4s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.55s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.25s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.35s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.3s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.05s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[3.05s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.15s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.75s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[3.2s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.8s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.9s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent delay-0"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.05s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.15s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.85s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[0.6s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.3s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[1.6s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.7s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.9s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.75s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.2s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.8s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[2.7s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.55s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.15s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.65s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.65s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.45s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[0.85s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.7s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.5s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.25s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.65s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.25s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[2.6s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[2.2s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[1.45s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[2.55s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[0.2s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:blur-none group-focus:delay-[1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.25s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.35s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.45s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.5s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.8s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.3s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.3s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.4s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.4s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.75s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.05s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2.35s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.4s]"></div>
+                <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[1.35s]"></div>
+              </button>
+                :
 
-        <button onClick={()=>{reserveplace()}} className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
-  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">Reserve Place</span>
+
+        <button  className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
+  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">{Eventdetails.placestoked} / {Eventdetails.places}</span>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.5s]"></div>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2s]"></div>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.5s]"></div>
@@ -317,7 +407,7 @@ export default function Events(){
             </div>
         </div>
                     </div>
-                    {organiser && <components.CardLineChart id={1} />}
+                    {organiser ==='organizer' && <components.CardLineChart id={1} />}
 
                     <div className=" w-10 ">
                     <img onClick={() => toggleDetails()} width="48" className=" hover:scale-110 hover:cursor-pointer " height="48" src="https://img.icons8.com/color/48/delete-sign--v1.png" alt="delete-sign--v1"/>

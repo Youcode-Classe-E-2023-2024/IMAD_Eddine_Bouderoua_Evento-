@@ -29,13 +29,39 @@ export default function Register({onChangeX}){
         const formDatat = new FormData();
 
       // Append data to FormData
-        formDatat.append('name', formData.name);
+        formDatat.append('name', formData.fullname);
         formDatat.append('email', formData.email);
         formDatat.append('password', formData.password);
 
 
-     
-      console.log('Registration FormData:', formDatat);
+        fetch('http://127.0.0.1:8000/api/register', {
+    method: 'POST',
+    body: formDatat,
+    })
+    .then(response => {
+        console.log('Response:', response);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data:', data);
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+
+       
+         
+    
+
+          setFormData({
+            name: '',
+            email: '',
+            password: '',
+          });
+      
        
       };
     return(

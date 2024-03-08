@@ -1,4 +1,20 @@
+import * as components from "@/components/modules"
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+
 export default function Base({active}){
+ const [Role,setRole] = useState<boolean | string>(false);
+
+ useEffect(() => {
+  components.getCookie('token')
+      .then((myCookie) => {
+          console.log(myCookie);
+          if (!myCookie) return;
+          console.log(myCookie + '-k');
+          setRole(myCookie);
+      });
+}, []);
     return(
         <>
       <header id="header" className=" overflow-hidden">
@@ -28,8 +44,24 @@ export default function Base({active}){
                   Reservations
                 </a>
               </li>
+
               <li className="buy-tickets mt-1 ">
-                <a href="#buy-tickets">Workspace</a>
+                {
+                  !Role ?
+                  
+                    <a href="#buy-tickets">Se connecter</a>
+                  :
+                    (Role === 'user' ?
+                      <a href="#buy-tickets">Logout</a>
+                      :
+                      (Role === 'organizer' ?
+                        <a href="#buy-tickets">Workspace</a>
+                        :
+                        null
+                      )
+                    )
+                }
+
               </li>
             </ul>
           </nav>

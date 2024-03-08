@@ -10,48 +10,48 @@ use Hash;
 
 class AuthController extends Controller
 {
-    public function register() {
-        return view('auth.register');
-    }
+   
 
-    public function store() {
-        $validated = request()->validate([
-            'name' => 'required|min:5|max:50',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed'
-        ]);
+    public function store(Request $request)
+    {
+        $validated = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            
+        ];
+      
 
         $validated['password'] = Hash::make($validated['password']);
 
-        if(request()->hasFile('image')) {
-            $imagePath = request()->file('image')->store('images', 'public');
-            $validated['image'] = $imagePath;
-        }
+   
         $user = User::create($validated);
-//        $user->assignRole('member');
+        // $user->assignRole('member');
 
-        return redirect()->route('login');
+        return response()->json(['message' => 'Registration successful']);
     }
 
-    public function login() {
-        return view('auth.login');
-    }
-
-    public function authenticate(User $user) {
-        $validated = request()->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        $remember = request()->has('remember');
-
-        if(auth()->attempt($validated, $remember)) {
-            request()->session()->regenerate();
-            return redirect()->route('main');
+    public function authenticate(Request $request) {
+        $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            
+        ];
+   
+        // Check if the user exists
+        $user = User::where('email', $credentials['email'])->first();
+    
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            // User not found or password incorrect
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
-
-        return redirect()->route('login')->withErrors([
-            'email' => 'No matching user found the provided email and password'
+    
+       
+        $hashedCredentials = $user->id . 'he' .  md5($credentials['email']) . 'And' . $user->password;
+    
+      
+        return response()->json([
+            'hashed_credentials' => $hashedCredentials,
         ]);
     }
 
