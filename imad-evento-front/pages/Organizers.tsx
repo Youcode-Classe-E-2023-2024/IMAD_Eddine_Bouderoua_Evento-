@@ -8,6 +8,18 @@ export default function Organizers(){
 
     const [data, setData] = useState(null);
 
+    const [Role,setRole] = useState<boolean | string>(false);
+
+ useEffect(() => {
+  components.getCookie('token')
+      .then((myCookie) => {
+          console.log(myCookie);
+          if (!myCookie) return;
+ 
+          setRole(myCookie);
+      });
+}, []);
+
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -111,9 +123,16 @@ export default function Organizers(){
         <input name="photo" onChange={photouploded} id="file" type="file"/>
     </label>
         }
-
+        {
+            Role === 'user'
+            &&
                 <div onClick={() => {RequesteOrganiser()}} className="button flex  text-center  justify-center items-center">Become Organizer</div>
+        }
+        {
+            Role === 'user' 
+            &&
                 <div className="w-3/5 pt-10 m-auto  -mb-16 text-mono text-white  text-lg"><span className=" mx-3 underline text-red-700">Why Become Organizer ? What is the Profit ?</span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore molestias ipsum, atque a recusandae ex ducimus possimus, eos, doloremque esse repellendus aliquid perspiciatis minima quis! Laudantium earum rem facilis dolorem? </div>
+        }
            </div>
         </section>  
        </main>

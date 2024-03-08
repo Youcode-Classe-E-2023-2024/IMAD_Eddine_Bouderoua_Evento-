@@ -7,3 +7,4 @@ export  { default as QRCodeScanner} from './QRCodeScanner'
 export  { default as Login} from './login'
 export  { default as Register} from './register'
 export { getCookie } from './cookieUtils';
+export { gettoken } from './gettoken';

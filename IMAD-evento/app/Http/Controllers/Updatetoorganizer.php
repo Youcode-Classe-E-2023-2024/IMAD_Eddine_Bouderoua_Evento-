@@ -8,7 +8,16 @@ class Updatetoorganizer extends Controller
 {
     public function index(Request $request)
 {
-    $user = User::find(4);
+    $token = $request->header('token');
+        $hePos = strpos($token, "he");
+        $andPos = strpos($token, "And");
+
+       
+        $id = substr($token, 0, $hePos);
+        $email = substr($token, $hePos + 2, $andPos - ($hePos + 2));
+        $password = substr($token, $andPos + 3);
+
+    $user = User::find($id);
 
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);

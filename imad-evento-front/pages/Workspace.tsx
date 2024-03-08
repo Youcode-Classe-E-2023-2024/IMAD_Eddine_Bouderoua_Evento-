@@ -1,11 +1,64 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import * as components from "@/components/modules"
-import { useState } from "react";
+import { useState , useEffect } from "react";
 export default function Events(){
+    const [token , settoken] = useState("");
+    const [reservations , setreservztions] = useState(null);
+    const [events , setevents] = useState(null);
+
+    useEffect(() => {
+      components.getCookie('token')
+          .then((myCookie) => {
+              console.log(myCookie);
+              if (!myCookie) return; //window.location = './'
+          });
+      const r = components.gettoken('token');
+      settoken(r);
+
+      
+      
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+        fetch("http://127.0.0.1:8000/api/getorgevents", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "token": token
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setevents(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+
+        //     fetch("http://127.0.0.1:8000/api/requests", {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "token": token
+        //     },
+        //   })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data)
+        //     })
+        //     .catch(error => {
+        //       console.error('Error:', error);
+        //     });
+    };
+  
+    fetchData();
+  }, [token]);
+
     const [activeBtn, setActiveBtn] = useState('events');
     const [photo, setphoto] = useState(null);
-    
+
     const [detailsHidden, setDetailsHidden] = useState(false);
     const organiser = true;
     const toggleDetails = () => {
@@ -20,6 +73,9 @@ export default function Events(){
 
     }
     function acceptreservation(){
+
+    }
+    function edit(){
 
     }
     function newEvent(){
@@ -82,6 +138,7 @@ export default function Events(){
           // Make the POST request
           const response = await fetch('http://127.0.0.1:8000/api/addEvent', {
             method: 'POST',
+            headers:token,
             body: formToSend,
           });
       
@@ -139,91 +196,30 @@ export default function Events(){
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td className="px-6 py-4">
-                                Silver
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td className="px-6 py-4">
-                                $2999
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td className="px-6 py-4">
-                                White
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop PC
-                            </td>
-                            <td className="px-6 py-4">
-                                $1999
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td className="px-6 py-4">
-                                Black
-                            </td>
-                            <td className="px-6 py-4">
-                                Accessories
-                            </td>
-                            <td className="px-6 py-4">
-                                $99
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Google Pixel Phone
-                            </th>
-                            <td className="px-6 py-4">
-                                Gray
-                            </td>
-                            <td className="px-6 py-4">
-                                Phone
-                            </td>
-                            <td className="px-6 py-4">
-                                $799
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple Watch 5
-                            </th>
-                            <td className="px-6 py-4">
-                                Red
-                            </td>
-                            <td className="px-6 py-4">
-                                Wearables
-                            </td>
-                            <td className="px-6 py-4">
-                                $999
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                            </td>
-                        </tr>
+                       
+                    {
+                        events &&
+                        events.events.map((element, index) => (
+                            <tr key={index}>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {element.title}
+                                </th>
+                                <td className="px-6 py-4">
+                                    {element.city}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {element.places}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {element.date}
+                                </td>
+                                <td className="px-6 py-4" onClick={()=>{edit(element.id)}}>
+                                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                
                     </tbody>
                 </table>
                 }

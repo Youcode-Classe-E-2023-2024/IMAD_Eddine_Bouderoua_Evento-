@@ -10,6 +10,7 @@ export default function Events(){
     const [Events, UpdateEvents] = useState(null);
     const [Eventdetails, Updatedetails] = useState(null);
     const [organiser, setorgan] = useState<boolean | string>(false);
+    const [token , settoken] = useState("");
     useEffect(() => {
       components.getCookie('token')
           .then((myCookie) => {
@@ -18,6 +19,8 @@ export default function Events(){
               console.log(myCookie + '-k');
               setorgan(myCookie);
           });
+      const r = components.gettoken('token');
+      settoken(r);
   }, []);
     
     useEffect(() => {
@@ -49,7 +52,7 @@ export default function Events(){
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
-              'token':'5',
+              'token':token,
           },
           body: JSON.stringify({ id: Eventdetails.id }),
       })
@@ -205,7 +208,7 @@ export default function Events(){
             <img
                 src={`http://127.0.0.1:8000/api/photo/${Eventdetails.photo}`}
                 alt="tailwind logo"
-                className="rounded-xl object-cover w-full h-40 md:h-full"
+                className=" rounded-xl object-cover w-full h-40 md:h-full"
             />
             </div>
             <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
@@ -328,7 +331,7 @@ export default function Events(){
 
 
         <button  className="group m-auto cursor-pointer hover:scale-105 relative cursor-default w-[180px] h-[60px] bg-[linear-gradient(144deg,_#4CAF50,_#4CAF50_50%,_#00FF7F)] text-white whitespace-nowrap flex flex-wrap rounded-lg overflow-hidden">
-  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">{Eventdetails.placestoked} / {Eventdetails.places}</span>
+  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">{Eventdetails.placestoked} / {Eventdetails.places} Reserved</span>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[0.5s]"></div>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[2s]"></div>
   <div className="w-[10px] h-[10px] blur-[5px] bg-[rgb(0,128,0)] delay-[0.2s] duration-[0.4s] hover:bg-transparent hover:delay-0 hover:duration-0 group-focus:bg-transparent group-focus:delay-[3.5s]"></div>

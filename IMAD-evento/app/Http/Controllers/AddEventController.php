@@ -5,16 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\events;
+use App\Models\reservations;
 
 class AddEventController extends Controller
 {
-    public function reserve(Request $request) {
-     
-        $requestData = $request->json()->all();
+  
     
+
+    public function reserve(Request $request) {
+        $requestData = $request->json()->all();
+
+        $token = $request->header('token');
+        $hePos = strpos($token, "he");
+        $andPos = strpos($token, "And");
+
+       
+        $id = substr($token, 0, $hePos);
+
         $eventId = $requestData['id'];
-        echo $eventId;
+    
+        $event = events::find($eventId);
+    
+        if (!$event) {
+            return response()->json(['error' => 'Event not found'], 404);
+        }
+
+        if ($event->manual_review) {
+            // Manual review required
+            reservations::create([
+                'userid' => $id,   
+                'eventid' => $eventId,
+                'validated' => 'no',  
+            ]);
+        
+            return response()->json(['message' => 'Manual review required']);
+        } else {
+            // Reservation successful
+            reservations::create([
+                'userid' => $id,  
+                'eventid' => $eventId, 
+                'validated' => 'ok', 
+            ]);
+        
+            return response()->json(['message' => 'Reservation successful']);
+        }
+        
     }
+    
     
     public function index(Request $request)
     {

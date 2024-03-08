@@ -49,13 +49,13 @@ export default function Base({active}){
                 {
                   !Role ?
                   
-                    <a href="#buy-tickets">Se connecter</a>
+                  <Link  href="./">Se connecter</Link>
                   :
                     (Role === 'user' ?
-                      <a href="#buy-tickets">Logout</a>
+                    <Link  href="./">Logout</Link>
                       :
                       (Role === 'organizer' ?
-                        <a href="#buy-tickets">Workspace</a>
+                      <Link  href="./Workspace">Workspace</Link>
                         :
                         null
                       )

@@ -47,3 +47,6 @@ Route::post("/reserve",[AddEventController::class,'reserve']);
 Route::post('/register', [AuthController::class, 'store']);
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/Checkwho', [Checkrole::class, 'index']);
+Route::get('/GetAllreservations',[GetAllEvents::class,'getrev']);
+Route::post("/getorgevents",[GetOrganizers::class,'getorgevents']);
+Route::post("/requests",[GetOrganizers::class,'requests']);
