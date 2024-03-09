@@ -19,6 +19,7 @@ class events extends Model
         'organizer',
         'manual_review',
         'price',
+        'organizerid'
     ];
     protected $casts = [
         'manual_review' => 'boolean',

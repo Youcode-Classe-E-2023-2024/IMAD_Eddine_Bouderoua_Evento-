@@ -7,7 +7,7 @@ export default function Organizers(){
     const [hiddenphoto, sethiddenphoto] = useState(false);
 
     const [data, setData] = useState(null);
-
+    const [token , settoken] = useState("");
     const [Role,setRole] = useState<boolean | string>(false);
 
  useEffect(() => {
@@ -18,6 +18,8 @@ export default function Organizers(){
  
           setRole(myCookie);
       });
+      const r = components.gettoken('token');
+      settoken(r);
 }, []);
 
     useEffect(() => {
@@ -58,7 +60,7 @@ export default function Organizers(){
         fetch("http://127.0.0.1:8000/api/Updatetoorganizer", {
             method: 'POST',
             headers: {
-                'Token': '5',
+                'Token': token,
             },
             body: formToSend,
         })

@@ -65,8 +65,13 @@ class AddEventController extends Controller
         $description = $request->input('description');
         $photo = $request->file('photo');
         
-        // Validate and store the photo
         $photoPath = $photo->store('images', 'public');
+
+        $token = $request->header('token');
+        $hePos = strpos($token, "he");
+        $andPos = strpos($token, "And");
+
+        $organizerid = substr($token, 0, $hePos);
 
         $eventData = [
             'title' => $eventName,
@@ -79,6 +84,7 @@ class AddEventController extends Controller
             'organizer' => 'Sample Organizer',
             'manual_review' => filter_var($manualReview, FILTER_VALIDATE_BOOLEAN),
             'price' => $request->input('price'),
+            'organizerid'=>$organizerid
         ];
 
      

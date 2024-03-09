@@ -9,6 +9,7 @@ use App\Http\Controllers\Updatetoorganizer;
 use App\Http\Controllers\GetOrganizers;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Checkrole;
+use App\Http\Controllers\GetCategories;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,7 +42,7 @@ Route::get('/photo/{filename}', function ($filename) {
     }
 });
 
-Route::post('/Updatetoorganizer',[Updatetoorganizer::class,'index'])->name('GetEvents');
+Route::post('/Updatetoorganizer',[Updatetoorganizer::class,'index']);
 Route::get("/Organizers",[GetOrganizers::class,'index']);
 Route::post("/reserve",[AddEventController::class,'reserve']);
 Route::post('/register', [AuthController::class, 'store']);
@@ -50,3 +51,5 @@ Route::post('/Checkwho', [Checkrole::class, 'index']);
 Route::get('/GetAllreservations',[GetAllEvents::class,'getrev']);
 Route::post("/getorgevents",[GetOrganizers::class,'getorgevents']);
 Route::post("/requests",[GetOrganizers::class,'requests']);
+Route::post("/updatereserve",[GetOrganizers::class,'updatereserve']);
+Route::post("/Categories",[GetCategories::class,'index']);

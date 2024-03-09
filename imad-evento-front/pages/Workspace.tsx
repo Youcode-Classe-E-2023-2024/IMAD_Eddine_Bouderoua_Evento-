@@ -6,6 +6,7 @@ export default function Events(){
     const [token , settoken] = useState("");
     const [reservations , setreservztions] = useState(null);
     const [events , setevents] = useState(null);
+    const [requests , setrequests] = useState(null);
 
     useEffect(() => {
       components.getCookie('token')
@@ -37,20 +38,21 @@ export default function Events(){
               console.error('Error:', error);
             });
 
-        //     fetch("http://127.0.0.1:8000/api/requests", {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       "token": token
-        //     },
-        //   })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data)
-        //     })
-        //     .catch(error => {
-        //       console.error('Error:', error);
-        //     });
+            fetch("http://127.0.0.1:8000/api/requests", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "token": token
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setrequests(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
     };
   
     fetchData();
@@ -69,12 +71,39 @@ export default function Events(){
       setActiveBtn(btn);
     };
 
-    function declinereservation(){
-
-    }
-    function acceptreservation(){
-
-    }
+    function declinereservation(eventid,userid) {
+        updateStatus(eventid,userid, 0);
+      }
+      
+      function acceptreservation(eventid,userid) {
+        updateStatus(eventid,userid, 1);
+      }
+      
+      async function updateStatus(eventid,userid, mode) {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/updatereserve', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': token
+            },
+            body: JSON.stringify({
+              'userid': userid,
+              'mode': mode,
+                'eventid':eventid,
+            }),
+          });
+      
+          if (response.ok) {
+            console.log('Reservation updated successfully!');
+          } else {
+            console.error('Failed to update reservation. Status:', response.status);
+          }
+        } catch (error) {
+          console.error('Error:', error.message);
+        }
+      }
+      
     function edit(){
 
     }
@@ -99,18 +128,27 @@ export default function Events(){
         price:'',
       });
     
+      
+    
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData((prevData) => ({
           ...prevData,
-          [name]: type === 'checkbox' ? checked : value,
+          [name]: type === 'checkbox' ? (checked ? [...prevData[name], value] : prevData[name].filter(category => category !== value)) : value,
         }));
       };
-    
+      
+      const handleCategoryChange = (e) => {
+        const { value, checked } = e.target;
+        setFormData((prevData) => ({
+          ...prevData,
+          categories: checked ? [...prevData.categories, value] : prevData.categories.filter(category => category !== value),
+        }));
+      };
+      
       const handleSubmit = async (e) => {
         e.preventDefault();
       
-        // Prepare data for request
         const requestData = {
           event_name: formData.eventName,
           event_date: formData.eventDate,
@@ -125,20 +163,15 @@ export default function Events(){
       
         try {
           const formToSend = new FormData();
-          formToSend.append('event_name', requestData.event_name);
-          formToSend.append('event_date', requestData.event_date);
-          formToSend.append('places', requestData.places);
-          formToSend.append('city', requestData.city);
-          formToSend.append('categories', requestData.categories);
-          formToSend.append('manual_review', requestData.manual_review);
-          formToSend.append('description', requestData.description);
-          formToSend.append('photo', requestData.photo);
-          formToSend.append('price', requestData.price);
+          for (const key in requestData) {
+            formToSend.append(key, requestData[key]);
+          }
       
-          // Make the POST request
           const response = await fetch('http://127.0.0.1:8000/api/addEvent', {
             method: 'POST',
-            headers:token,
+            headers: {
+              'token': token,
+            },
             body: formToSend,
           });
       
@@ -152,7 +185,30 @@ export default function Events(){
         }
       };
       
-      
+      const [searchTerm, setSearchTerm] = useState('');
+
+  const changeterm = (e) => {
+    setSearchTerm(e.target.value);
+    fetchcategiries(e.target.value);
+  };
+      function fetchcategiries(term){
+        fetch("http://127.0.0.1:8000/api/Categories", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "token": token,
+              "term":term
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setevents(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+      }
     return(
         <main className="   w-screen h-full flex flex-col items-center justify-between">
         <components.Base active={8}/>
@@ -248,24 +304,29 @@ export default function Events(){
                     <tbody>
                       
                      
-                 
-                        <tr>
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple Watch 5
-                            </th>
-                            <td className="px-6 py-4">
-                                Red
-                            </td>
-                            <td className="px-6 py-4">
-                                Wearables
-                            </td>
-                            <td className="px-6 py-4">
-                            <img onClick={()=>{declinereservation()}} width="30" height="30" src="https://img.icons8.com/color/30/checked-2--v1.png" alt="checked-2--v1"/>
-                            </td>
-                            <td className="px-6 py-4">
-                            <img onClick={()=>{acceptreservation()}} width="30" height="30" src="https://img.icons8.com/office/30/cancel.png" alt="cancel"/>
-                            </td>
+                    {
+                    requests &&
+                    requests.reservations.map((element, index) => (
+                        <tr key={index}>
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {element.name}
+                        </th>
+                        <td className="px-6 py-4">
+                            {element.user}
+                        </td>
+                        <td className="px-6 py-4">
+                            {element.date}
+                        </td>
+                        <td className="px-6 py-4">
+                            <img onClick={() => acceptreservation(element.id,element.userid)} width="30" height="30" src="https://img.icons8.com/color/30/checked-2--v1.png" alt="checked-2--v1" />
+                        </td>
+                        <td className="px-6 py-4">
+                            <img onClick={() => declinereservation(element.id,element.userid)} width="30" height="30" src="https://img.icons8.com/office/30/cancel.png" alt="cancel" />
+                        </td>
                         </tr>
+                    ))
+                    }
+
                     </tbody>
                 </table>
                 }
@@ -285,97 +346,106 @@ export default function Events(){
         
                 <div className="h-4/5 w-3/5 m-auto ">
                 <div className="w-full  flex flex-col  items-center justify-center h-full dark">
-  <div className="w-full bg-gray-800 rounded-lg shadow-md p-6 border flex ">
+  <div className=" w-full bg-gray-800 rounded-lg shadow-md p-6 border flex ">
   <img onClick={() => newEvent()} width="48" className=" absolute   right-80 top-26  hover:scale-110 hover:cursor-pointer " height="48" src="https://img.icons8.com/color/48/delete-sign--v1.png" alt="delete-sign--v1"/>
-    <div className="w-2/4">
+    <div className="custom-scrollbar w-2/4">
 
     <h2 className="text-2xl font-bold text-gray-200 mb-4">Contact Form</h2>
 
-    <form className="flex flex-wrap p-2" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="eventName"
-        value={formData.eventName}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] mr-[2%]"
-        placeholder="Event Name"
-      />
+    <form className="  flex flex-wrap p-2" onSubmit={handleSubmit}>
+  <input
+    type="text"
+    name="eventName"
+    value={formData.eventName}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] mr-[2%]"
+    placeholder="Event Name"
+  />
 
-      <input
-        type="date"
-        name="eventDate"
-        value={formData.eventDate}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
-        placeholder="Date"
-      />
+  <input
+    type="date"
+    name="eventDate"
+    value={formData.eventDate}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
+    placeholder="Date"
+  />
 
-      <input
-        type="number"
-        name="places"
-        value={formData.places}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] mr-[2%]"
-        placeholder="Places"
-      />
+  <input
+    type="number"
+    name="places"
+    value={formData.places}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] mr-[2%]"
+    placeholder="Places"
+  />
 
-      <input
-        type="text"
-        name="city"
-        value={formData.city}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
-        placeholder="City"
-      />
-      <input
-        type="number"
-        name="price"
-        value={formData.price}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
-        placeholder="price"
-      />
+  <input
+    type="text"
+    name="city"
+    value={formData.city}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
+    placeholder="City"
+  />
 
-      <input
-        type="text"
-        name="categories"
-        value={formData.categories}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full mx-10"
-        placeholder="Categories"
-      />
+  <input
+    type="number"
+    name="price"
+    value={formData.price}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
+    placeholder="Price"
+  />
 
-      <div className="flex items-center bg-gray-700 m-auto mb-3">
-        <div className="content">
-          <label className="checkBox relative inline-block">
-            <input
-              type="checkbox"
-              name="manualReview"
-              checked={formData.manualReview}
-              onChange={handleChange}
-              className="hidden"
-            />
-            <div className="transition absolute top-0 left-0 w-4 h-4 bg-white border border-gray-300 rounded-md"></div>
-          </label>
-        </div>
-        <span className="ml-2 text-white">Manual review?</span>
-      </div>
+  <div className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full mx-10">
+    <input
+      type="text"
+      name="price"
+      value={searchTerm}
+      onChange={changeterm}
+      className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
+      placeholder="searchterm"
+    />
+    <div id="checklist">
+      <input checked={formData.categories.includes("1")} value="1" name="categories" type="checkbox" id="01" onChange={handleCategoryChange} />
+      <label htmlFor="01">Bread</label>
+    </div>
+  </div>
 
-      <textarea
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-auto md:mb-auto md:w-full md:h-auto md:min-h-[100px] md:max-h-[100px] md:flex-grow md:flex-shrink md:flex-auto focus:bg-gray-md:focus:outline-none:focus:ring-blue-md:focus:border-transparent transition ease-in-out duration-fastest"
-        placeholder="Description"
-      ></textarea>
+  <div className="flex items-center bg-gray-700 m-auto mb-3">
+    <div className="content">
+      <label className="checkBox relative inline-block">
+        <input
+          type="checkbox"
+          name="manualReview"
+          checked={formData.manualReview}
+          onChange={handleChange}
+          className="hidden"
+        />
+        <div className="transition absolute top-0 left-0 w-4 h-4 bg-white border border-gray-300 rounded-md"></div>
+      </label>
+    </div>
+    <span className="ml-2 text-white">Manual review?</span>
+  </div>
 
-      <button
-        type="submit"
-        className="m-auto bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
-      >
-        Validate
-      </button>
-    </form>
+  <textarea
+    name="description"
+    value={formData.description}
+    onChange={handleChange}
+    className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-auto md:mb-auto md:w-full md:h-auto md:min-h-[100px] md:max-h-[100px] md:flex-grow md:flex-shrink md:flex-auto focus:bg-gray-md:focus:outline-none:focus:ring-blue-md:focus:border-transparent transition ease-in-out duration-fastest"
+    placeholder="Description"
+  ></textarea>
+
+  <button
+    type="submit"
+    className="m-auto bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
+  >
+    Validate
+  </button>
+</form>
+
+
     </div>
     <div className="h-full w-2/4  flex">
     <label  className="custum-file-upload">

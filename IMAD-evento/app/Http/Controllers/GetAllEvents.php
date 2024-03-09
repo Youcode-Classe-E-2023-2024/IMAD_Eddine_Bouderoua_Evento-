@@ -7,10 +7,21 @@ use App\Models\events;
 use App\Models\reservations;
 class GetAllEvents extends Controller
 {
-    public function index(){
-        $Events = events::All();
-        return response()->json(['Events' => $Events]);
+    public function index()
+    {
+    $totalEvents = events::count();
+
+    if ($totalEvents >= 0) {
+        $rangeStart = rand(0, $totalEvents - 13);
+
+        $events = events::limit(12)->offset($rangeStart)->get();
+
+        return response()->json(['Events' => $events]);
+    } else {
+        return response()->json(['message' => 'Not enough events in the database.']);
     }
+    }
+
 
     public function getrev(Request $request)
     {

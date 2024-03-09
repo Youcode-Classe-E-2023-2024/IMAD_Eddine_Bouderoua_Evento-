@@ -27,22 +27,22 @@ export default function Base({active}){
           <nav id="nav-menu-container">
             <ul className="nav-menu  border-t-4 border-b  pt-.5  border-white shadow-md rounded-md">
             <li className={active === 1 ? "menu-active mt-1" : ""}>
-                <a href="#intro" className={active === 1 ? "" : ""}>Home</a>
+                <Link href="./" className={active === 1 ? "" : ""}>Home</Link>
               </li>
               <li className={active === 2 ? "menu-active mt-1" : ""}>
-                <a href="#about" className={active === 1 ? "" : ""}>
+                <Link href="./Events" className={active === 1 ? "" : ""}>
                   Events
-                </a>
+                </Link>
               </li>
               <li className={active === 3 ? "menu-active mt-1" : ""}>
-                <a href="#speakers" className={active === 1 ? "" : ""}>
+                <Link href="./Organizers" className={active === 1 ? "" : ""}>
                   Organizers
-                </a>
+                </Link>
               </li>
               <li className={active === 4 ? "menu-active mt-1" : ""}>
-                <a href="#schedule" className={active === 1 ? "" : ""}>
+                <Link href="./Reservations" className={active === 1 ? "" : ""}>
                   Reservations
-                </a>
+                </Link>
               </li>
 
               <li className="buy-tickets mt-1 ">

@@ -24,22 +24,23 @@ export default function Events(){
   }, []);
     
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch("http://127.0.0.1:8000/api/GetAllEvents");
-            if (!response.ok) {
-              throw new Error("Failed to fetch data");
-            }
       
-            const data = await response.json();
-            UpdateEvents(data.Events);  // Update to access "Events" key
-          } catch (error) {
-            console.error("Error fetching data:", error.message);
-          }
-        };
-      
-        fetchData();
-      }, []);
+      fetchData();
+    }, []);
+    
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/GetAllEvents");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+  
+        const data = await response.json();
+        UpdateEvents(data.Events);  // Update to access "Events" key
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
 
     var x = true
     const toggleDetails = () => {
@@ -72,9 +73,11 @@ export default function Events(){
   
     const paginatetooleft = () =>{
        console.log("paginateleft") 
+       fetchData();
     }
     const paginatetooright = () =>{
         console.log("paginateright") 
+        fetchData();
     }
     function article(index){
         console.log(Events[index])
