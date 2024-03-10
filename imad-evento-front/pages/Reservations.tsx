@@ -39,6 +39,33 @@ export default function Organizers(){
   
     fetchData();
   }, [token]);
+  const generatePDF = async (event) => {
+
+    
+
+
+    try {
+      const response = await fetch('/api/script', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: event.name, place: event.place, date: event.date,places:event.places }),  // Send the event directly without wrapping it in an object
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log('PDF created successfully');
+      } else {
+        console.error('Error creating PDF:', data.message);
+      }
+    } catch (error) {
+      console.error('Error creating PDF:', error.message);
+    }
+  };
+  
+
     return(
         <main className="   w-screen h-full flex flex-col items-center justify-between">
         <components.Base active={4}/>
@@ -85,7 +112,7 @@ export default function Organizers(){
                                 </td>
                                 <td className="px-6 py-4">
                                     {event.validated === 'ok' ? (
-                                        <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Get Ticket/pdf</a>
+                                        <a href="#" onClick={() => generatePDF(event)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Get Ticket/pdf</a>
                                     ) : (
                                         'Not Validated'
                                     )}
