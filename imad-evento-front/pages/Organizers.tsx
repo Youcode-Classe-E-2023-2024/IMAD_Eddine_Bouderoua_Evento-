@@ -11,6 +11,11 @@ export default function Organizers(){
     const [comments, setcomment] = useState(null);
     const [token , settoken] = useState("");
     const [Role,setRole] = useState<boolean | string>(false);
+    const [contact,hidecontact] = useState(true);
+    function contactsetion(){
+      hidecontact(!contact);
+    }
+
 
  useEffect(() => {
   components.getCookie('token')
@@ -274,7 +279,7 @@ export default function Organizers(){
 
 
       {
-        1 == 1 &&
+        contact &&
         <div className="cardmsg">
   <span className="title">Comments</span>
   <div className="commcont custom-scrollbar">
@@ -338,7 +343,14 @@ export default function Organizers(){
   </div>
 </div>
       }
-   
+      <div className="absolute bottom-0  right-1">
+      <div
+            onClick={()=>{contactsetion()}}
+            className=" support mb-4 "
+         
+          >
+<img width="40" height="40" src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/40/external-social-activism-flaticons-lineal-color-flat-icons.png" alt="external-social-activism-flaticons-lineal-color-flat-icons"/>          </div>
+      </div>
            </div>
         </section>  
        </main>
