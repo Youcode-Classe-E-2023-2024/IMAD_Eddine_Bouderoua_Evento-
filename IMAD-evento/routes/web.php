@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\OrganizerSubController;
+use App\Http\Controllers\Admin;
 
 
 /*
@@ -18,25 +19,16 @@ use App\Http\Controllers\OrganizerSubController;
 |
 */
 
-Route::get('/', function () {
-    return view('landing-page');
-});
-
-/* main route */
-Route::get('/main', [MainController::class, 'index'])->name('main')->middleware('auth');
-
-/* auth route */
-Route::get('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
-
-Route::post('/register', [AuthController::class, 'store'])->name('register.store')->middleware('guest');
+Route::get('/', [Admin::class,"index"]);
+Route::delete('/deleteuser/{id}', [Admin::class, 'deleteUser'])->name('delete.user');
+Route::post('/update-role/{user}', [Admin::class, 'updateRole'])->name('update.role');
+Route::post('/acceptevent/{event}', [Admin::class, 'acceptEvent'])->name('acceptevent');
 
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate')->middleware('guest');
+
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-
-Route::delete('/user/delete', [AuthController::class, 'destroy'])->name('user.delete');
 
 /* forget-password route */
 Route::get('/forget-password', [ForgetPasswordController::class, 'forgetPassword'])->name('forget.password');
@@ -47,10 +39,3 @@ Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'resetPa
 
 Route::post('/reset-password', [ForgetPasswordController::class, 'resetPasswordPost'])->name('reset.password.post');
 
-/* subscribe route */
-Route::post('/subscribe/store', [OrganizerSubController::class, 'subscribe'])->name('subscribe.store');
-
-Route::get('/subscribe', function () {
-    $black_hover = 'Be an organizer';
-    return view('subscribe', compact('black_hover'));
-})->name('subscribe');
