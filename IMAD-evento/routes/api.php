@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Checkrole;
 use App\Http\Controllers\GetCategories;
 use App\Http\Controllers\GetStatus;
+use App\Http\Controllers\Commentsc;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,3 +58,8 @@ Route::post("/Categories",[GetCategories::class,'index']);
 Route::post('/Basedonterm', [GetAllEvents::class, 'eventBasedOnName']);
 Route::post('/Basedoncategorie', [GetAllEvents::class, 'eventBasedOnCategory']);
 Route::post('/GetStatus', [GetStatus::class, 'index']);
+Route::post('/newcomment', [Commentsc::class, 'index']);
+Route::get('/getallcomments', [Commentsc::class, 'getall']);
+Route::post('/newcomment', [Commentsc::class, 'index']);
+Route::post('/postliked', [Commentsc::class, 'postliked']);
+Route::post('/newcatego', [Commentsc::class, 'newcatego']);

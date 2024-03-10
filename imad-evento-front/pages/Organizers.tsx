@@ -2,11 +2,13 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import * as components from "@/components/modules"
 import { useState , useEffect } from "react";
+import { headers } from "next/headers";
 export default function Organizers(){
     const [photo, setphoto] = useState(null);
     const [hiddenphoto, sethiddenphoto] = useState(false);
 
     const [data, setData] = useState(null);
+    const [comments, setcomment] = useState(null);
     const [token , settoken] = useState("");
     const [Role,setRole] = useState<boolean | string>(false);
 
@@ -35,6 +37,18 @@ export default function Organizers(){
       };
   
       fetchData();
+      const fetchcomments = async () => {
+        try {
+          const response1 = await fetch('http://127.0.0.1:8000/api/getallcomments');
+          const result1 = await response1.json();
+       
+          setcomment(result1.comments); 
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchcomments();
     }, []); 
     // useEffect(() => {
     //     console.log(data)
@@ -82,20 +96,142 @@ export default function Organizers(){
    
 
     
-    
+    const [textareaValue, setTextareaValue] = useState('');
+
+
+  const handleTextAreaChange = (event) => {
+
+    setTextareaValue(event.target.value);
+
+
+    console.log('Textarea value:', event.target.value);
+  };
+  function newcomment() {
+   
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", 
+        "token":token,
+      },
+      body: JSON.stringify({
+        textareaValue: textareaValue, 
+      }),
+    };
+    fetch("http://127.0.0.1:8000/api/newcomment", requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data here
+        console.log('New Comment Response:', data);
+      })
+      .catch(error => {
+        // Handle any errors during the fetch
+        console.error('Error:', error);
+      });
+
+      setcomment((prevComments) => {
+        const updatedComments = [...prevComments];
+        const tmp = { ...updatedComments[0], likes: 0, msg: textareaValue };
+        updatedComments.push(tmp);
       
+        return updatedComments;
+      });
+  }
+  function requestcat(){
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", 
+        "token":token,
+      },
+      body: JSON.stringify({
+        textareaValue: `Requested The Categorie ${textareaValue}`, 
+      }),
+    };
+    fetch("http://127.0.0.1:8000/api/newcomment", requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data here
+        console.log('New Comment Response:', data);
+      })
+      .catch(error => {
+        // Handle any errors during the fetch
+        console.error('Error:', error);
+      });
+
+      const requestOptions2 = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+          "token":token,
+        },
+        body: JSON.stringify({
+          textareaValue: textareaValue, 
+        }),
+      };
+      fetch("http://127.0.0.1:8000/api/newcatego", requestOptions2)
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data here
+          console.log('New Comment Response:', data);
+        })
+        .catch(error => {
+          // Handle any errors during the fetch
+          console.error('Error:', error);
+        });
+
+        setcomment((prevComments) => {
+          const updatedComments = [...prevComments];
+          const tmp = { ...updatedComments[0], likes: 0, msg: `Requested The Categorie ${textareaValue}` };
+          updatedComments.push(tmp);
+        
+          return updatedComments;
+        });
+  }
+  function postliked(index,id){
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", 
+        "token":token,
+      },
+      body: JSON.stringify({
+        id: id, 
+      }),
+    };
+    fetch("http://127.0.0.1:8000/api/postliked", requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        console.log('New Comment Response:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+      console.log(comments[index].likes);
+      setcomment(prevComments => {
+        const updatedComments = [...prevComments];
+        const commentIndexToUpdate = index;
+    
+        if (commentIndexToUpdate !== -1) {
+          updatedComments[commentIndexToUpdate].likes = parseInt(updatedComments[commentIndexToUpdate].likes) + 1;
+        }
+    
+        return updatedComments;
+      });
+       
+  }
     return(
         <main className="   w-screen h-full flex flex-col items-center justify-between">
         <components.Base active={3}/>
         <section id="intro" className="bg-gray-800 pb-32  overflow-hidden flex justify-center items-center  ">
          <div className="   gap-5 pt-20  p-32 custom-scrollbar  h-full   z-50 mt-52 container   mx-auto">
             <div className=" w-full h-full ">
-                <div className="grid grid-cols-5 w-full h-full gap-y-5">
+                <div className="grid grid-cols-5  w-full h-full gap-10">
                
                 {
                     data &&
                     data.map((element) => (
-                        <div key={element.id} className="cardo">
+                        <div key={element.id} className="cardo z-40">
                             <div className={`bg bg-[http://127.0.0.1:8000/api/photo/${element.photo}]`}>
                                 {element.photo ? (
                                     <img className="h-full" src={`http://127.0.0.1:8000/api/photo/${element.photo}`} alt="" />
@@ -135,6 +271,74 @@ export default function Organizers(){
             &&
                 <div className="w-3/5 pt-10 m-auto  -mb-16 text-mono text-white  text-lg"><span className=" mx-3 underline text-red-700">Why Become Organizer ? What is the Profit ?</span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore molestias ipsum, atque a recusandae ex ducimus possimus, eos, doloremque esse repellendus aliquid perspiciatis minima quis! Laudantium earum rem facilis dolorem? </div>
         }
+
+
+      {
+        1 == 1 &&
+        <div className="cardmsg">
+  <span className="title">Comments</span>
+  <div className="commcont custom-scrollbar">
+
+      {
+        comments && comments.map((element,index) =>(
+          <div className="comments">
+            <div className="comment-react" onClick={()=>{postliked(index,element.id)}}>
+            <img className="m-auto p-1 upbut" width="26" height="26" src="https://img.icons8.com/metro/26/up--v1.png" alt="up--v1"/>
+              <hr/>
+              <span>{element.likes}</span>
+            </div>
+            <div className="comment-container">
+              <div className="user">
+                <div className="user-pic">
+                  <svg fill="none" viewBox="0 0 24 24" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linejoin="round" fill="#707277" stroke-linecap="round" stroke-width="2" stroke="#707277" d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"></path>
+                    <path stroke-width="2" fill="#707277" stroke="#707277" d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"></path>
+                  </svg>
+                </div>
+                <div className="user-info">
+                  <span>{element.organizer}</span>
+                  <div>{element.created_at}</div>
+                </div>
+              </div>
+              <div className="comment-content">
+              {element.msg}
+              </div>
+            </div>
+          </div>
+
+        ))
+
+      }
+      
+     
+      </div>
+
+  <div className="text-box">
+    <div className="box-container">
+    <textarea
+      placeholder="Add redit or ask New categorie"
+      value={textareaValue}
+      onChange={handleTextAreaChange}
+    />
+      <div>
+        <div className="formatting flex">
+         
+          <button onClick={()=>{requestcat()}} type="submit" className="sendr " title="Send">
+          <img width="19" height="19" src="https://img.icons8.com/material-rounded/19/invite.png" alt="invite"/>
+          </button>
+          <button onClick={()=>{newcomment()}} type="submit" className="send" title="Send">
+            <svg fill="none" viewBox="0 0 24 24" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="#ffffff" d="M12 5L12 20"></path>
+              <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="#ffffff" d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      }
+   
            </div>
         </section>  
        </main>
