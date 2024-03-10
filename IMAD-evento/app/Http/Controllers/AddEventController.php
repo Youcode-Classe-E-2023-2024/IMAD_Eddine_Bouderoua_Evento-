@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\events;
+use App\Models\eventstatus;
 use App\Models\reservations;
 
 class AddEventController extends Controller
@@ -13,6 +14,8 @@ class AddEventController extends Controller
     
 
     public function reserve(Request $request) {
+       
+
         $requestData = $request->json()->all();
 
         $token = $request->header('token');
@@ -29,6 +32,11 @@ class AddEventController extends Controller
         if (!$event) {
             return response()->json(['error' => 'Event not found'], 404);
         }
+
+        $currentDayName = strtolower(date('l'));
+        EventStatus::where('eventid', $eventId)
+            ->increment($currentDayName);
+       
 
         if ($event->manual_review) {
             // Manual review required
@@ -92,6 +100,9 @@ class AddEventController extends Controller
        
         $type = gettype($manualReview);
 
+        $eventID = $event->id;
+
+    eventstatus::create(['eventid' => $eventID]);
     echo $type;
         return response()->json([
             'message' => 'Event received successfully',

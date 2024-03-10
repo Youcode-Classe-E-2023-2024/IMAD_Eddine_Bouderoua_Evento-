@@ -10,6 +10,7 @@ use App\Http\Controllers\GetOrganizers;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Checkrole;
 use App\Http\Controllers\GetCategories;
+use App\Http\Controllers\GetStatus;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,3 +54,6 @@ Route::post("/getorgevents",[GetOrganizers::class,'getorgevents']);
 Route::post("/requests",[GetOrganizers::class,'requests']);
 Route::post("/updatereserve",[GetOrganizers::class,'updatereserve']);
 Route::post("/Categories",[GetCategories::class,'index']);
+Route::post('/Basedonterm', [GetAllEvents::class, 'eventBasedOnName']);
+Route::post('/Basedoncategorie', [GetAllEvents::class, 'eventBasedOnCategory']);
+Route::post('/GetStatus', [GetStatus::class, 'index']);

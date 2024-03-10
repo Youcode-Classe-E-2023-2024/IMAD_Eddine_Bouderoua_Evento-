@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class GetOrganizers extends Controller
 {
     public function index(){
-        $Organ = User::whereNotNull('photo')->get();
+        $Organ = User::limit(5)->whereNotNull('photo')->get();
         return response()->json(['Organizers' => $Organ]);
     }
     public function getorgevents(Request $request)

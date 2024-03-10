@@ -22,12 +22,27 @@ export default function Events(){
       const r = components.gettoken('token');
       settoken(r);
   }, []);
-    
+    const [cateories,setcat] = useState(null); 
     useEffect(() => {
-      
+      fetch("http://127.0.0.1:8000/api/Categories", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "token": token,
+              "term":""
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setcat(data.categories);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
       fetchData();
     }, []);
-    
+
     const fetchData = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/GetAllEvents");
@@ -47,7 +62,7 @@ export default function Events(){
       setDetailsHidden(!detailsHidden);
     };
     function reserveplace() {
-      
+      console.log('hhhh000')
       if(!organiser){ return;}
       fetch("http://127.0.0.1:8000/api/reserve", {
           method: 'POST',
@@ -79,22 +94,105 @@ export default function Events(){
         console.log("paginateright") 
         fetchData();
     }
+    const [selectedEventId, setSelectedEventId] = useState(null);
     function article(index){
         console.log(Events[index])
+        setSelectedEventId(Events[index].id);
         setDetailsHidden(!detailsHidden);
         Updatedetails(Events[index]);
     }
+
+    const [sarchter, setSelectedCategory] = useState('');
+    const handletermch = async (e) => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/Basedonterm", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ term: e.target.value }),
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+    
+        const data = await response.json();
+        UpdateEvents(data.Events);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+    
+    const categorieclick = async (id) => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/Basedoncategorie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: id }),
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+    
+        const data = await response.json();
+        UpdateEvents(data.Events);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+    
     return(
         <main className="   w-screen h-full flex flex-col items-center justify-between">
         <components.Base active={2}/>
         <section id="intro" className="bg-gray-800 pb-24   overflow-hidden flex justify-center items-center  ">
-  
+        <div className="top-[295px] left-0 select">
+      <div className="selected">
+        <img className="filtersvg" width="30" height="30" src="https://img.icons8.com/quill/30/filter.png" alt="filter" />
+      </div>
+      <div className="options custom-scrollbar flex-wrap ">
+        {
+          cateories &&
+          cateories.map(element =>(
+
+          <div title="option-2 ">
+            <input
+              id="option-2"
+              name="option"
+              type="radio"
+              value="option-2"
+            />
+            <label onClick={()=>categorieclick(element.id)} className="m-auto option " data-txt={element.name}></label>
+          </div>
+          ))
+        }
+        
+      </div>
+    </div>
+<div className=" top-[180px] left-0 select">
+  <div
+    className="selected"
+  >
+   <img className="filtersvg" width="30" height="30" src="https://img.icons8.com/dotty/30/search.png" alt="search"/>
+  </div>
+  <div className="options1 ">
+    <div title="option-3 ">
+      <input             onChange={handletermch}
+ className=" text-black" placeholder="search" name="option" type="text" />
+      
+    </div>
+  </div>
+</div>
+
          <div className="   gap-y-5  grid grid-cols-4 p-10 custom-scrollbar  h-full   z-50 mt-52 container   mx-auto">
         
 
 
          {
-            Array.isArray(Events) &&
+            (Array.isArray(Events) && Events) &&
             Events.map((element, index) => (
                 <article key={element.id} onClick={() => article(index)} className="relative background transform transition duration-300 hover:scale-105 shadow-lg h-72 w-80 hover:shadow-xl isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 mx-auto">
                 <img src={`http://127.0.0.1:8000/api/photo/${element.photo}`} alt="University of Southern California" className="absolute inset-0 h-full w-full object-cover" />
@@ -413,7 +511,7 @@ export default function Events(){
             </div>
         </div>
                     </div>
-                    {organiser ==='organizer' && <components.CardLineChart id={1} />}
+                    {organiser ==='organizer' && <components.CardLineChart key={selectedEventId} id={selectedEventId}/>}
 
                     <div className=" w-10 ">
                     <img onClick={() => toggleDetails()} width="48" className=" hover:scale-110 hover:cursor-pointer " height="48" src="https://img.icons8.com/color/48/delete-sign--v1.png" alt="delete-sign--v1"/>

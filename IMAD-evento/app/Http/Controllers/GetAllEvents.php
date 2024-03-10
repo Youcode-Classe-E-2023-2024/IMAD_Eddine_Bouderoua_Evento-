@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\events;
 use App\Models\reservations;
+
 class GetAllEvents extends Controller
 {
     public function index()
@@ -12,7 +13,7 @@ class GetAllEvents extends Controller
     $totalEvents = events::count();
 
     if ($totalEvents >= 0) {
-        $rangeStart = rand(0, $totalEvents - 13);
+        $rangeStart = rand(0, $totalEvents - 4);
 
         $events = events::limit(12)->offset($rangeStart)->get();
 
@@ -61,5 +62,19 @@ class GetAllEvents extends Controller
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
-
+    public function eventBasedOnName(Request $request){
+        $all = $request->json()->all();
+        $term = $all["term"];
+        $events = events::where('title', 'like', "%$term%")->get();
+        return response()->json(['Events' => $events]);
+    }
+    
+    public function eventBasedOnCategory(Request $request){
+       
+        $all = $request->json()->all();
+        $id = $all["id"];
+        $events = events::where('categories', 'like', "%$id%")->get();
+        return response()->json(['Events' => $events]);
+    }
+    
 }

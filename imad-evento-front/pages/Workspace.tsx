@@ -7,6 +7,7 @@ export default function Events(){
     const [reservations , setreservztions] = useState(null);
     const [events , setevents] = useState(null);
     const [requests , setrequests] = useState(null);
+    const [categories , setcat] = useState(null);
 
     useEffect(() => {
       components.getCookie('token')
@@ -134,7 +135,7 @@ export default function Events(){
         const { name, value, type, checked } = e.target;
         setFormData((prevData) => ({
           ...prevData,
-          [name]: type === 'checkbox' ? (checked ? [...prevData[name], value] : prevData[name].filter(category => category !== value)) : value,
+          [name]: type === 'checkbox' ? checked : value,
         }));
       };
       
@@ -203,7 +204,7 @@ export default function Events(){
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                setevents(data);
+                setcat(data.categories);
             })
             .catch(error => {
               console.error('Error:', error);
@@ -404,12 +405,32 @@ export default function Events(){
       name="price"
       value={searchTerm}
       onChange={changeterm}
-      className="bg-gray-700 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[48%] ml-[2%]"
+      className="bg-gray-700  text-gray-200 border-0 rounded-md py-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full md:w-[100%] m-auto"
       placeholder="searchterm"
+      
     />
     <div id="checklist">
-      <input checked={formData.categories.includes("1")} value="1" name="categories" type="checkbox" id="01" onChange={handleCategoryChange} />
-      <label htmlFor="01">Bread</label>
+      {
+        categories &&
+        categories.map(category => (
+
+        <>
+        <input
+         name="categories"
+          type="checkbox"
+          checked={formData.categories.includes(category.id.toString())}
+          value={category.id}
+          id={`checkbox-${category.id}`}
+          onChange={handleCategoryChange}
+           />
+
+        <label  htmlFor={`checkbox-${category.id}`}>{category.name}</label>
+
+        
+        </>
+        
+        ))
+      }
     </div>
   </div>
 

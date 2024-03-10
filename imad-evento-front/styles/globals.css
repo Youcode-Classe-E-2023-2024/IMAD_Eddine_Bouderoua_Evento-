@@ -1706,7 +1706,21 @@ body.mobile-nav-active #mobile-nav-toggle {
 #footer .footer-top .footer-newsletter {
   margin-bottom: 30px;
 }
+input {
+  border-radius: 10px;
+  outline: 2px solid #9c9d9f44;
+  border: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #e2e2e2;
+  outline-offset: 3px;
+  padding: 10px 1rem;
+  transition: 0.25s;
+}
 
+input:focus {
+  outline-offset: 5px;
+  background-color: #fff
+}
 #footer .footer-top .footer-newsletter input[type="email"] {
   border: 0;
   padding: 6px 8px;
@@ -2521,3 +2535,183 @@ button {
 .custum-file-upload input {
   display: none;
 }
+
+.select {
+  
+  width: fit-content;
+  position: absolute;
+  
+  cursor: pointer;
+  transition: 300ms;
+  color: white;
+  overflow: hidden;
+}
+.select:hover{
+  cursor: pointer;
+}
+.selected {
+  width: 50px;
+
+  background-color: #8e95a6;
+  
+  height: 50px;
+
+  border-radius: 5px;
+  position: relative;
+  z-index: 100000;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  position: relative;
+  right: 0px;
+  height: 10px;
+  transform: rotate(-90deg);
+  width: 25px;
+  fill: white;
+    z-index: 100000;
+  transition: 300ms;
+}
+
+.options {
+  margin: 1px 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px;
+  height: 300px;
+  border: 1px solid ;
+  overflow-y: auto;
+  background-color: #2a2f3b;
+  position: relative;
+  top: -100px;
+  opacity: 0;
+  transition: 300ms;
+}
+.select .filtersvg:hover{
+  transform: scale(1.1);
+}
+.select:hover > .options {
+  opacity: 1;
+  
+  z-index: 100000;
+  top: 0;
+}
+
+.select:hover > .selected .arrow {
+  transform: rotate(0deg);
+}
+
+.option {
+  border-radius: 5px;
+  border: 0.2px solid rgb(157, 71, 71) ;
+
+  padding: 5px; margin: 0px 5px;
+  transition: 300ms;
+  background-color: #3f475a;
+  width: 150px;
+  font-size: 15px;
+}
+.option:hover {
+  cursor: pointer;
+  background-color: #323741;
+}
+
+.options input[type="radio"] {
+  display: none;
+}
+
+.options label {
+  display: inline-block;
+}
+.options label::before {
+  content: attr(data-txt);
+}
+
+.options input[type="radio"]:checked + label {
+  display: none;
+}
+
+.options input[type="radio"]#all:checked + label {
+  display: none;
+}
+
+.select:has(.options input[type="radio"]#all:checked) .selected::before {
+  content: attr(data-default);
+}
+.select:has(.options input[type="radio"]#option-1:checked) .selected::before {
+  content: attr(data-one);
+}
+.select:has(.options input[type="radio"]#option-2:checked) .selected::before {
+  content: attr(data-two);
+}
+.select:has(.options input[type="radio"]#option-3:checked) .selected::before {
+  content: attr(data-three);
+}
+
+
+.options1 {
+  margin: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px;
+    border: 1px solid rgba(253, 253, 253, 0.636);
+  overflow-y: auto;
+  background-color: #2a2f3b;
+  position: relative;
+  top: -100px;
+  opacity: 0;
+  transition: 300ms;
+}
+.select .filtersvg:hover{
+  transform: scale(1.1);
+}
+.select:hover > .options1 {
+  opacity: 1;
+  
+  z-index: 100000;
+  top: 0;
+}
+
+.select:hover > .selected .arrow {
+  transform: rotate(0deg);
+}
+
+
+
+.options1 input[type="radio"] {
+  display: none;
+}
+
+.options1 label {
+  display: inline-block;
+}
+.options1 label::before {
+  content: attr(data-txt);
+}
+
+.options1 input[type="radio"]:checked + label {
+  display: none;
+}
+
+.options1 input[type="radio"]#all:checked + label {
+  display: none;
+}
+
+.select:has(.options1 input[type="radio"]#all:checked) .selected::before {
+  content: attr(data-default);
+}
+.select:has(.options1 input[type="radio"]#option-1:checked) .selected::before {
+  content: attr(data-one);
+}
+.select:has(.options1 input[type="radio"]#option-2:checked) .selected::before {
+  content: attr(data-two);
+}
+.select:has(.options1 input[type="radio"]#option-3:checked) .selected::before {
+  content: attr(data-three);
+}
+

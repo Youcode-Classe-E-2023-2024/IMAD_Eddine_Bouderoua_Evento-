@@ -1,29 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
 
-export default function CardLineChart({id}) {
-  React.useEffect(() => {
-    var config = {
+const CardLineChart = ({ id }) => {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    fetchStatusData(id);
+  }, [id]);
+
+  useEffect(() => {
+    if (stats) {
+      createChart();
+    }
+  }, [stats]);
+
+  const fetchStatusData = async (eventId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/GetStatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: eventId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch event status");
+      }
+
+      const data = await response.json();
+      setStats(data.status);
+    } catch (error) {
+      console.error("Error fetching event status:", error.message);
+    }
+  };
+
+  const createChart = () => {
+    const config = {
       type: "line",
       data: {
         labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-
         datasets: [
           {
-            label: "Today",
+            label: "All reservations",
             backgroundColor: "#3182ce",
             borderColor: "#3182ce",
-            data: [20, 35, 25, 10, 30, 40, 45],
-
+            data: [stats.monday, stats.tuesday, stats.wednesday, stats.thursday, stats.friday, stats.saturday, stats.sunday],
             fill: false,
-          },
-          {
-            label: "All Reservations",
-            fill: false,
-            backgroundColor: "#edf2f7",
-            borderColor: "#edf2f7",
-            data: [10, 30, 45, 37, 28, 20, 43],
-
           },
         ],
       },
@@ -100,19 +123,24 @@ export default function CardLineChart({id}) {
         },
       },
     };
-    var ctx = document.getElementById("line-chart").getContext("2d");
+    const ctx = document.getElementById("line-chart").getContext("2d");
+
+    if (window.myLine) {
+      window.myLine.destroy();
+    }
+
     window.myLine = new Chart(ctx, config);
-  }, []);
+  };
+
   return (
-    <>
-      <div className="relative flex flex-col m-auto  break-words  shadow-lg rounded bg-blueGray-700">
-        <div className="p-4  flex-auto h-80  border">
-          {/* Chart */}
-          <div className="relative h-full  ">
-            <canvas id="line-chart" className=""></canvas>
-          </div>
+    <div className="relative flex flex-col m-auto break-words shadow-lg rounded bg-blueGray-700">
+      <div className="p-4 flex-auto h-80 border">
+        <div className="relative h-full">
+          <canvas id="line-chart"></canvas>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default CardLineChart;
