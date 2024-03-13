@@ -44,6 +44,7 @@ Route::get('/photo/{filename}', function ($filename) {
     }
 });
 
+Route::middleware(['autha'])->group(function () {
 Route::post('/Updatetoorganizer',[Updatetoorganizer::class,'index']);
 Route::get("/Organizers",[GetOrganizers::class,'index']);
 Route::post("/reserve",[AddEventController::class,'reserve']);
@@ -63,3 +64,4 @@ Route::get('/getallcomments', [Commentsc::class, 'getall']);
 Route::post('/newcomment', [Commentsc::class, 'index']);
 Route::post('/postliked', [Commentsc::class, 'postliked']);
 Route::post('/newcatego', [Commentsc::class, 'newcatego']);
+});

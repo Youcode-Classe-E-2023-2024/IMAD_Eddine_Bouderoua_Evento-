@@ -13,7 +13,7 @@ export default function Events(){
       components.getCookie('token')
           .then((myCookie) => {
               console.log(myCookie);
-              if (!myCookie) return; //window.location = './'
+              if (!myCookie) if (!myCookie){window.location.href = "./"; return;} //window.location = './'
           });
       const r = components.gettoken('token');
       settoken(r);
@@ -178,6 +178,7 @@ export default function Events(){
       
           if (response.ok) {
             console.log('Event added successfully!');
+            window.location.href = "./";
           } else {
             console.error('Failed to add event. Status:', response.status);
           }
@@ -255,27 +256,48 @@ export default function Events(){
                     <tbody>
                        
                     {
-                        events &&
-                        events.events.map((element, index) => (
-                            <tr key={index}>
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {element.title}
-                                </th>
-                                <td className="px-6 py-4">
-                                    {element.city}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {element.places}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {element.date}
-                                </td>
-                                <td className="px-6 py-4" onClick={()=>{edit(element.id)}}>
-                                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                </td>
-                            </tr>
-                        ))
-                    }
+                    !events ? (
+                      // Skeleton loader while data is being fetched
+                      <tr >
+                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div className="loader2"></div>
+                      </th>
+                      <td className="px-6 py-4">
+                      <div className="loader2"></div>
+                      </td>
+                      <td className="px-6 py-4">
+                      <div className="loader2"></div>
+                      </td>
+                      <td className="px-6 py-4">
+                      <div className="loader2"></div>                      </td>
+                      <td className="px-6 py-4" onClick={() => { edit(element.id) }}>
+                        <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                      </td>
+                    </tr>
+                    ) : (
+                      // Display the actual event data
+                      events.events.map((element, index) => (
+                        <tr key={index}>
+                          <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {element.title}
+                          </th>
+                          <td className="px-6 py-4">
+                            {element.city}
+                          </td>
+                          <td className="px-6 py-4">
+                            {element.places}
+                          </td>
+                          <td className="px-6 py-4">
+                            {element.date}
+                          </td>
+                          <td className="px-6 py-4" onClick={() => { edit(element.id) }}>
+                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                          </td>
+                        </tr>
+                      ))
+                    )
+                  }
+
                 
                     </tbody>
                 </table>

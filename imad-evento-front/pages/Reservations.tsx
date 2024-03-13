@@ -10,7 +10,7 @@ export default function Organizers(){
       components.getCookie('token')
           .then((myCookie) => {
               console.log(myCookie);
-              if (!myCookie) return; //window.location = './'
+              if (!myCookie) if (!myCookie){window.location.href = "./"; return;} //window.location = './'
           });
       const r = components.gettoken('token');
       settoken(r);
@@ -50,7 +50,7 @@ export default function Organizers(){
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: event.name, place: event.place, date: event.date,places:event.places }),  // Send the event directly without wrapping it in an object
+        body: JSON.stringify({ name: event.name, place: event.place, date: event.date,places:event.places , email:localStorage.getItem("stuf") }),  // Send the event directly without wrapping it in an object
       });
   
       const data = await response.json();
@@ -96,30 +96,53 @@ export default function Organizers(){
                         
                       
                     {
-                        reservations && reservations.events.map((event, index) => (
-                            <tr key={index}>
+                        !reservations ? (
+                            // Skeleton loader while data is being fetched
+                            <tr >
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {event.name}
+                                <div className="loader2"></div>
                                 </th>
                                 <td className="px-6 py-4">
-                                    {event.place}
+                                <div className="loader2"></div>
                                 </td>
                                 <td className="px-6 py-4">
-                                    {event.places}
+                                <div className="loader2"></div>
                                 </td>
                                 <td className="px-6 py-4">
-                                    {event.date}
+                                <div className="loader2"></div>
                                 </td>
                                 <td className="px-6 py-4">
-                                    {event.validated === 'ok' ? (
-                                        <a href="#" onClick={() => generatePDF(event)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Get Ticket/pdf</a>
-                                    ) : (
-                                        'Not Validated'
-                                    )}
+                               <div className="loader2"></div>
                                 </td>
                             </tr>
-                        ))
-                    }
+                        ) : (
+                            // Display the actual reservation data
+                            reservations.events.map((event, index) => (
+                            <tr key={index}>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {event.name}
+                                </th>
+                                <td className="px-6 py-4">
+                                {event.place}
+                                </td>
+                                <td className="px-6 py-4">
+                                {event.places}
+                                </td>
+                                <td className="px-6 py-4">
+                                {event.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                {event.validated === 'ok' ? (
+                                    <a href="#" onClick={() => generatePDF(event)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Get Ticket/pdf</a>
+                                ) : (
+                                    'Not Validated'
+                                )}
+                                </td>
+                            </tr>
+                            ))
+                        )
+                        }
+
                   
                         
 

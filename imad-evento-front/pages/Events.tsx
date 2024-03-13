@@ -15,7 +15,7 @@ export default function Events(){
       components.getCookie('token')
           .then((myCookie) => {
               console.log(myCookie);
-              if (!myCookie) return;
+              if (!myCookie) if (!myCookie){window.location.href = "./"; return;}
               console.log(myCookie + '-k');
               setorgan(myCookie);
           });
@@ -190,18 +190,51 @@ export default function Events(){
          <div className="   gap-y-5  grid grid-cols-4 p-10 custom-scrollbar  h-full   z-50 mt-52 container   mx-auto">
         
 
-
+        
          {
-            (Array.isArray(Events) && Events) &&
-            Events.map((element, index) => (
-                <article key={element.id} onClick={() => article(index)} className="relative background transform transition duration-300 hover:scale-105 shadow-lg h-72 w-80 hover:shadow-xl isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 mx-auto">
-                <img src={`http://127.0.0.1:8000/api/photo/${element.photo}`} alt="University of Southern California" className="absolute inset-0 h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-                <h3 className="z-10 mt-3 text-3xl font-bold text-white">{element.city}</h3>
-                <div className="z-10 pb-4 gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">{element.title}</div>
-                </article>
-            ))
-        }
+  Events === null ? (
+    // Show skeleton or loading state
+    <article className="flex justify-center absolute inset-0    top-52  background transform transition duration-300 hover:scale-105 shadow-lg h-72 w-80 hover:shadow-xl isolate  items-center   overflow-hidden rounded-2xl   mx-auto">
+      <div
+        className="p-3 animate-spin drop-shadow-2xl bg-gradient-to-bl from-pink-400 via-purple-400 to-indigo-600 md:w-48 md:h-48 h-32 w-32 aspect-square rounded-full"
+      >
+        <div
+          className="rounded-full h-full w-full bg-slate-100 dark:bg-zinc-900 background-blur-md"
+        ></div>
+      </div>
+
+  </article>
+  ) : (
+    // Show the list of events
+    Array.isArray(Events) &&
+    Events.map((element, index) => (
+      <article key={element.id} onClick={() => article(index)} className="relative background transform transition duration-300 hover:scale-105 shadow-lg h-72 w-80 hover:shadow-xl isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 mx-auto">
+        <div className="absolute inset-0 ">
+        <div className="absolute loader">
+    <div className="bar1"></div>
+    <div className="bar2"></div>
+    <div className="bar3"></div>
+    <div className="bar4"></div>
+    <div className="bar5"></div>
+    <div className="bar6"></div>
+    <div className="bar7"></div>
+    <div className="bar8"></div>
+    <div className="bar9"></div>
+    <div className="bar10"></div>
+    <div className="bar11"></div>
+    <div className="bar12"></div>
+</div>
+          <img src={`http://127.0.0.1:8000/api/photo/${element.photo}`}  className="absolute h-full w-full object-cover" />
+
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
+        <h3 className="z-10 mt-3 text-3xl font-bold text-white">{element.city}</h3>
+        <div className="z-10 pb-4 gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">{element.title}</div>
+      </article>
+    ))
+  )
+}
+
 
 
 

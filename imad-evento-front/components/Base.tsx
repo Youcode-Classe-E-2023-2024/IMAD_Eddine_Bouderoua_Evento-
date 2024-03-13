@@ -2,6 +2,7 @@ import * as components from "@/components/modules"
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+// import Cookies from 'js-cookie';
 
 export default function Base({active}){
  const [Role,setRole] = useState<boolean | string>(false);
@@ -15,6 +16,11 @@ export default function Base({active}){
           setRole(myCookie);
       });
 }, []);
+
+function logout(){
+  // Cookies.remove('token', { path: '/' });
+  window.location.href = "./";
+}
     return(
         <>
       <header id="header" className=" overflow-hidden">

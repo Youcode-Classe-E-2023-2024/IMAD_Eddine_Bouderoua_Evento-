@@ -14,7 +14,7 @@ class GetAllEvents extends Controller
 
     if ($totalEvents >= 0) {
         $rangeStart = rand(0, $totalEvents - 4);
-
+        $rangeStart = 0;
         $events = events::limit(12)->offset($rangeStart)->get();
 
         return response()->json(['Events' => $events]);

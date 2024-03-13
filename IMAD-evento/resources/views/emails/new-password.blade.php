@@ -1,6 +1,4 @@
-@extends('shared.layout')
 
-@section('content')
     <!-- component -->
     <body>
     <section class="min-h-screen flex items-stretch text-white ">
@@ -71,4 +69,4 @@
         </div>
     </section>
     </body>
-@endsection
+

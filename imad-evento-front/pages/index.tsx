@@ -2,14 +2,25 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import * as components from "@/components/modules"
 import { useState , useEffect } from "react";
+
 // Load Inter font with the "latin" subset
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [auth,hideauth] = useState(true);
+  const [auth,hideauth] = useState(false);
   const [toggleauth,hidelogin] = useState(true);
 
- 
+  const [organiser, setorgan] = useState<boolean | string>(false);
+  
+  useEffect(() => {
+    components.getCookie('token')
+        .then((myCookie) => {
+            console.log(myCookie);
+            if (!myCookie){hideauth(true); return;} 
+            setorgan(myCookie);
+        });
+
+}, []);
 
   const handleXChange = (newValue) => {
     console.log(newValue)
